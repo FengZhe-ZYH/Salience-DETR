@@ -32,7 +32,11 @@ dim_feedforward = 2048
 position_embedding = PositionEmbeddingSine(embed_dim // 2, temperature=10000, normalize=True, offset=-0.5)
 
 backbone = ResNetBackbone(
-    "resnet50", norm_layer=FrozenBatchNorm2d, return_indices=(1, 2, 3), freeze_indices=(0,)
+    "resnet50", 
+    weights="/hdd2/zyh/Salience-DETR/pretrain/MyResNet50_backbone_epoch340.pth", # <-- Change this to the path of your .pth file
+    norm_layer=FrozenBatchNorm2d, 
+    return_indices=(1, 2, 3), 
+    freeze_indices=(0,)
 )
 
 neck = ChannelMapper(
