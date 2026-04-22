@@ -33,7 +33,7 @@ position_embedding = PositionEmbeddingSine(embed_dim // 2, temperature=10000, no
 
 backbone = ResNetBackbone(
     "resnet50", 
-    weights="/hdd2/zyh/Salience-DETR/pretrain/MyResNet50_backbone_epoch340.pth", # <-- Change this to the path of your .pth file
+    weights="/hdd2/zyh/Salience-DETR/pretrain/ResNet50_DenseCL_epoch400.pth", # <-- Change this to the path of your .pth file
     norm_layer=FrozenBatchNorm2d, 
     return_indices=(1, 2, 3), 
     freeze_indices=(0,)
@@ -57,6 +57,7 @@ transformer = SalienceTransformer(
             d_ffn=dim_feedforward,
         ),
         num_layers=transformer_enc_layers,
+        max_num_embedding=500
     ),
     neck=RepVGGPluXNetwork(
         in_channels_list=neck.num_channels,

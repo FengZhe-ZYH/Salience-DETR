@@ -5,7 +5,7 @@ from transforms import presets
 from optimizer import param_dict
 
 # Commonly changed training configurations
-num_epochs = 12   # train epochs
+num_epochs = 15   # train epochs
 batch_size = 2    # total_batch_size = #GPU x batch_size
 num_workers = 4   # workers for pytorch DataLoader
 pin_memory = True # whether pin_memory for pytorch DataLoader
@@ -39,7 +39,7 @@ resume_from_checkpoint = None
 
 learning_rate = 1e-4  # initial learning rate
 optimizer = optim.AdamW(lr=learning_rate, weight_decay=1e-4, betas=(0.9, 0.999))
-lr_scheduler = optim.lr_scheduler.MultiStepLR(milestones=[10], gamma=0.1)
+lr_scheduler = optim.lr_scheduler.MultiStepLR(milestones=[11], gamma=0.1)
 
 # This define parameter groups with different learning rate
 param_dicts = param_dict.finetune_backbone_and_linear_projection(lr=learning_rate)
