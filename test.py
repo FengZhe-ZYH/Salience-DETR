@@ -144,12 +144,12 @@ def test_on_dataset():
         accelerator.state.device = "cpu"  # change device to CPU for plot
         dataset.coco = coco_dt  # load predicted results into data_loader
         data_loader = create_test_data_loader(
-            dataset, accelerator=accelerator, batch_size=1, num_workers=args.workers
+            dataset, accelerator=None, batch_size=1, num_workers=args.workers
         )
         visualize_coco_bounding_boxes(
             data_loader=data_loader,
             show_conf=args.show_conf,
-            show_dir=args.show_dir,
+            show_dir=args.show_dir, 
             font_scale=args.font_scale,
             box_thick=args.box_thick,
             fill_alpha=args.fill_alpha,

@@ -36,7 +36,7 @@ backbone = ResNetBackbone(
     weights="/hdd2/zyh/Salience-DETR/pretrain/ResNet50_DenseCL_epoch400.pth", # <-- Change this to the path of your .pth file
     norm_layer=FrozenBatchNorm2d, 
     return_indices=(1, 2, 3), 
-    freeze_indices=(0,)
+    freeze_indices=()
 )
 
 neck = ChannelMapper(
