@@ -25,7 +25,7 @@ def parse_args():
     parser.add_argument("--mmdet-config", type=str, required=True)
     parser.add_argument("--mmdet-checkpoint", type=str, required=True)
     parser.add_argument("--device", type=str, default="cuda:0")
-    parser.add_argument("--score-thr", type=float, default=0.3)
+    parser.add_argument("--score-thr", type=float, default=0.7)
     parser.add_argument("--max-per-img", type=int, default=200)
     parser.add_argument(
         "--nms-iou",

@@ -30,16 +30,16 @@ def parse_args():
     parser.add_argument("--image-id", type=int, default=None, help="COCO image id to visualize")
     parser.add_argument("--file-name", type=str, default=None, help="COCO file_name to visualize (overrides image-id)")
 
-    parser.add_argument("--tooth-score-thr", type=float, default=0.3)
-    parser.add_argument("--patch-scale", type=float, default=1.5)
-    parser.add_argument("--patch-min-size", type=int, default=512)
+    parser.add_argument("--tooth-score-thr", type=float, default=0.7)
+    parser.add_argument("--patch-scale", type=float, default=1.1)
+    parser.add_argument("--patch-min-size", type=int, default=16)
     parser.add_argument("--max-patches", type=int, default=16)
 
     parser.add_argument("--gt-min-area", type=float, default=4.0)
     parser.add_argument("--gt-min-iou", type=float, default=0.0)
 
     parser.add_argument("--out-dir", type=str, required=True)
-    parser.add_argument("--max-print-lesions", type=int, default=2, help="How many lesions to print mapping detail")
+    parser.add_argument("--max-print-lesions", type=int, default=5, help="How many lesions to print mapping detail")
     args = parser.parse_args()
     return args
 
