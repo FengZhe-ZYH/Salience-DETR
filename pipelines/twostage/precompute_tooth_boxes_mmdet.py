@@ -27,6 +27,12 @@ def parse_args():
     parser.add_argument("--device", type=str, default="cuda:0")
     parser.add_argument("--score-thr", type=float, default=0.3)
     parser.add_argument("--max-per-img", type=int, default=200)
+    parser.add_argument(
+        "--nms-iou",
+        type=float,
+        default=0.75,
+        help="Apply NMS to tooth boxes after score filtering. Set <0 to disable.",
+    )
     parser.add_argument("--out", type=str, required=True, help="Output jsonl path")
     parser.add_argument("--model-name", type=str, default="mmdet-faster-rcnn-tooth")
     args = parser.parse_args()
@@ -90,6 +96,22 @@ def _select_boxes_from_mmdet_result(result, score_thr: float, max_per_img: int) 
     return bboxes.astype(np.float32), scores.astype(np.float32)
 
 
+def _apply_nms_xyxy(bboxes: np.ndarray, scores: np.ndarray, iou_thr: float) -> Tuple[np.ndarray, np.ndarray]:
+    if bboxes.size == 0:
+        return bboxes.reshape(0, 4).astype(np.float32), scores.reshape(0).astype(np.float32)
+    if iou_thr < 0:
+        return bboxes.astype(np.float32), scores.astype(np.float32)
+
+    import torch
+    from torchvision.ops import nms
+
+    boxes_t = torch.as_tensor(bboxes, dtype=torch.float32)
+    scores_t = torch.as_tensor(scores, dtype=torch.float32)
+    keep = nms(boxes_t, scores_t, float(iou_thr))
+    keep_np = keep.detach().cpu().numpy()
+    return bboxes[keep_np].astype(np.float32), scores[keep_np].astype(np.float32)
+
+
 def main():
     args = parse_args()
 
@@ -114,13 +136,14 @@ def main():
 
         result = inference_detector(model, str(img_path))
         bboxes, scores = _select_boxes_from_mmdet_result(result, args.score_thr, args.max_per_img)
+        bboxes, scores = _apply_nms_xyxy(bboxes, scores, args.nms_iou)
         rec = ToothBoxesRecord(
             file_name=file_name,
             image_id=image_id,
             boxes=bboxes.tolist(),
             scores=scores.tolist(),
             model=args.model_name,
-            meta={"score_thr": args.score_thr, "max_per_img": args.max_per_img},
+            meta={"score_thr": args.score_thr, "max_per_img": args.max_per_img, "nms_iou": args.nms_iou},
         )
         records.append(rec)
 
